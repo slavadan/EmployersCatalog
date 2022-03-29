@@ -10,9 +10,9 @@ app.autodiscover_tasks()
 
 
 app.conf.beat_schedule = {
-    'clear-database-task':
+    'pay_salary':
         {
-            'task': 'catalog.tasks.pay_celery',
-            'schedule': crontab(minute='*/1'),
+            'task': 'catalog.tasks.pay_salary',
+            'schedule': crontab(minute=0, hour='*/2'),
         }
 }

@@ -12,15 +12,44 @@ services:
       - POSTGRES_PASSWORD=mypass
       - POSTGRES_DB=catalog
 
+  rabbitmq:
+    container_name: "rabbitmq"
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 8888:8888
+      - 15672:15672
+
+  worker:
+    build: .
+    command: sh  ./celery.sh
+    volumes:
+      - .:/home/slavadan/docker
+    depends_on:
+      - rabbitmq
+      - db
+      - web
+
+  celery_beat:
+    build: .
+    container_name: "celery-beat"
+    command: sh  ./celery-beat.sh
+    volumes:
+      - .:/home/slavadan/docker
+    depends_on:
+    - web
+    - db
+    - rabbitmq
+
   web:
     build: .
-    command: python /home/slavadan/docker/manage.py runserver 0.0.0.0:8000
+    command: sh ./web.sh
     volumes:
       - .:/home/slavadan/docker
     ports:
       - 8000:8000
     depends_on:
       - db
+      - rabbitmq
 
 volumes:
   postgres_data:

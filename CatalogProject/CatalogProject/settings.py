@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-*(_09+=kekm5nv4*wmof$rze@@@+cp^_uyb5z=kw%k+is@3i!a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -163,4 +163,4 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
 }
 
-CELERY_BROKER_URL = 'amqp://0.0.0.0:5672'
+CELERY_BROKER_URL = 'amqp://rabbitmq:5672'

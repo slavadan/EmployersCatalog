@@ -20,7 +20,6 @@ django-mptt==0.13.4
 django-seed==0.3.1
 django-templated-mail==1.1.1
 djangorestframework==3.13.1
-djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
 Faker==13.3.3

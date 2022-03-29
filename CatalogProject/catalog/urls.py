@@ -1,12 +1,16 @@
 from django.urls import path
-from .views import AllEmployeeViewSet
+from .views import EmployeeViewSet, PersonalView
 from rest_framework.routers import DefaultRouter
 
 
 app_name = 'catalog'
 router = DefaultRouter()
-router.register(r'employers/all', AllEmployeeViewSet)
+router.register(r'employers/all', EmployeeViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('personal/', PersonalView.as_view())
+]
+
+urlpatterns += router.urls
 
 

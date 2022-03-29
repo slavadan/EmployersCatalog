@@ -8,7 +8,13 @@ from .tasks import clear_paid_salary_task
 @admin.action(description="Clear paid salary")
 def clear_paid_salary(modeladmin, request, queryset):
     if len(queryset) > 20:
-        clear_paid_salary_task.delay(queryset)
+        id_list = list()
+
+        for employee in queryset:
+            id_list.append(employee.id)
+
+        clear_paid_salary_task.delay(id_list)
+
     else:
         queryset.update(paid_salary=0)
 
