@@ -1,4 +1,4 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 from .models import Employee
 from .serializers import EmployeeSerializer, CustomUserSerializer
 from .mypermissions import IsStaff
@@ -15,6 +15,15 @@ class EmployeeViewSet(ModelViewSet):
     filter_backends = (SearchFilter, )
     search_fields = ('level', )
     permission_classes = (IsStaff, )
+
+
+class OneLevelEmployeeViewSet(ViewSet):
+    permission_classes = (IsStaff, )
+
+    def list(self, request, level):
+        queryset = Employee.objects.filter(level=level)
+        serializer = EmployeeSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 # Create your views here.
