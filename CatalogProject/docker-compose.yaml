@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypass
+      - POSTGRES_DB=catalog
+
+  rabbitmq:
+    container_name: "rabbitmq"
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 8888:8888
+      - 15672:15672
+
+  worker:
+    build: .
+    command: sh  ./celery.sh
+    volumes:
+      - .:/home/slavadan/docker
+    depends_on:
+      - rabbitmq
+      - db
+      - web
+
+  celery_beat:
+    build: .
+    container_name: "celery-beat"
+    command: sh  ./celery-beat.sh
+    volumes:
+      - .:/home/slavadan/docker
+    depends_on:
+    - web
+    - db
+    - rabbitmq
+
+  web:
+    build: .
+    command: sh ./web.sh
+    volumes:
+      - .:/home/slavadan/docker
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+      - rabbitmq
+
+volumes:
+  postgres_data:
